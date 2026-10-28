@@ -78,10 +78,13 @@ read them, borrow ideas, don't edit them.
   add-ons (separate apps), which the launcher reads through their providers
 
 ## Testing
-- Remote buttons: `settings put secure enabled_accessibility_services
+- Remote buttons: `adb shell input keyevent` injects past the accessibility filter, so it never reaches
+  RemoteKeysService (Android handles 284 itself); the emulator keyboards lack these scancodes, so the real
+  buttons are box-only. What can be checked: `dumpsys input | grep InputFilterEnabled` (true once the helper
+  is on) and `am start ... --ez com.mazem3dia.mzboxshome.SHOW_APPS true`. Turn on: `settings put secure enabled_accessibility_services
   com.mazem3dia.mzboxshome/.RemoteKeysService` and `settings put secure accessibility_enabled 1` (overwrites
-  any other enabled service: read the old value first and put it back). Then `input keyevent 193` (Netflix),
-  190, 194, 192, 284. Undo: `settings delete secure enabled_accessibility_services`
+  any other enabled service: read the old value first and put it back). Then press the real buttons on the box.
+  Undo: `settings delete secure enabled_accessibility_services`
 - Unit tests: `./gradlew testReleaseUnitTest`
 - Emulator: `android_11_tv` (Google TV, API 30, 1920x1080, density 320), matching the box's Android. The box
   runs a 1920x1080 UI (density to confirm on the box); reset any density change with `adb shell wm density reset`. Hold OK: `adb shell input keyevent --longpress DPAD_CENTER`

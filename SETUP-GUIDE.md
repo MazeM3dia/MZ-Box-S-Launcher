@@ -36,8 +36,8 @@ Sources: the cleanyourtv list tested on this model (builds 737 and 772,
 | # | Step | Needs |
 |---|---|---|
 | 0.1 | Android 11 TV emulator: **done** (`android_11_tv`: Google TV, API 30, 1920x1080, density 320). Start it from Android Studio's Device Manager when Claude needs it | PC |
-| 0.2 | Install MZ Box S Home on the emulator, check Home, Customize, and **Customize > Remote buttons** (keys 193, 190, 194, 192, 284 sent with adb) | Claude, PC |
-| 0.3 | Fix what the emulator test turns up, build the test APK, put it in `../test-builds/` | Claude |
+| 0.2 | **Done**: MZ Box S Home and the add-ons checked on the emulator. The real shortcut buttons can only be tested on the box (the emulator keyboard has none, and `adb shell input keyevent` skips the helper) | Claude, PC |
+| 0.3 | **Done** (28 Oct): emulator fixes in, APKs ready in `../test-builds/xiaomi-box-s/` | Claude |
 | 0.4 | Set up the debloat tools once, in PowerShell in `xiaomi-tv-box-s-launcher`: `python -m venv tools\venv` then `tools\venv\Scripts\python.exe -m pip install -r tools\requirements.txt` (the tools come from cleanyourtv, MIT). Claude's safety check blocks this download, so you run it, or allow it when Claude asks | PC (you) |
 | 0.5 | Read through [debloat/debloat.txt](debloat/debloat.txt) and comment out anything you want to keep (put `#` in front) | PC |
 
@@ -110,7 +110,7 @@ com.xiaomi.mitv.updateservice`) when you want to check for one.
 
 | # | Step | Needs |
 |---|---|---|
-| 6.1 | Install MZ Box S Home (and Waktu Solat): Claude runs `adb install -r <apk>`. Without adb: install LocalSend on the box from Play Store, send the APKs from the PC or phone, open them on the box and allow installing from LocalSend | Claude, or Phone + Box |
+| 6.1 | Install the ready-made APKs from `..\test-builds\xiaomi-box-s\` (MZ-Box-S-Home-0.1, Waktu-Solat-2.1, Device-Report-1.1, Capacity-Stats-1.1; its README.txt has the first-time checks): Claude runs `adb install -r <apk>` for each. Without adb: install LocalSend on the box from Play Store, send the APKs from the PC or phone, open them on the box and allow installing from LocalSend | Claude, or Phone + Box |
 | 6.2 | Use it from the apps list for a while. Google TV keeps Home until it is turned off, so there is no "Always" choice yet | Box |
 | 6.3 | **Remote buttons**: Settings > System > Accessibility, in the services list > **MZ Box S Remote buttons** > on (or Claude turns it on over adb). Then Customize > Remote buttons: pick what each button opens | Box (or Claude) |
 | 6.4 | Check again that the Wi-Fi is not owned by setupwraith (3.2) | Claude |

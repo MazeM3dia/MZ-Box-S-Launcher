@@ -913,7 +913,7 @@ public final class MainActivity extends Activity {
             p.option(getString(R.string.remote_apps_grid), getString(R.string.remote_apps_grid_detail),
                     current.equals(RemoteButtons.APPS_GRID), () -> pickRemoteTarget(RemoteButtons.APPS_GRID));
             if (!current.isEmpty() && !current.equals(RemoteButtons.APPS_GRID) && findInstalled(current) == null) {
-                p.option(targetName(current), null, true, () -> pickRemoteTarget(current));
+                p.option(getString(R.string.remote_missing), current, true, () -> pickRemoteTarget(current));
             }
             for (AppEntry app : installed)
                 p.option(app.label, null, app.packageName().equals(current),
@@ -931,7 +931,7 @@ public final class MainActivity extends Activity {
         if (target.equals(RemoteButtons.NOTHING)) return getString(R.string.remote_nothing);
         if (target.equals(RemoteButtons.APPS_GRID)) return getString(R.string.remote_apps_grid);
         AppEntry app = findInstalled(target);
-        return app != null ? app.label : getString(R.string.remote_missing, target);
+        return app != null ? app.label : getString(R.string.remote_missing);
     }
 
     private void openAccessibility() {

@@ -50,11 +50,14 @@ final class HomePrefs {
     void setDock(List<String> dock) { putList(DOCK, dock); }
 
     /**
-     * Apps kept off Home. Until the owner hides or shows one, Prime Video: the firmware (or Play) turns it back on
-     * after a reboot even when it was disabled (cleanyourtv, build 772).
+     * Apps kept off Home. Until the owner hides or shows one: Prime Video, which the firmware (or Play) turns back
+     * on after a reboot even when it was disabled (cleanyourtv, build 772), and Google TV's phone-remote helper,
+     * which has a launcher entry but nothing to show.
      */
     Set<String> hidden() {
-        if (!prefs.contains(HIDDEN)) return new HashSet<>(Arrays.asList(RemoteButtons.PRIME_PACKAGE));
+        if (!prefs.contains(HIDDEN)) {
+            return new HashSet<>(Arrays.asList(RemoteButtons.PRIME_PACKAGE, "com.google.android.tv.remote.service"));
+        }
         return new HashSet<>(list(HIDDEN));
     }
 
