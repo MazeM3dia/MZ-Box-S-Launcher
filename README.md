@@ -1,7 +1,7 @@
 # MZ Box S Home
 
 A lightweight home screen for the Xiaomi TV Box S 2nd Gen (Google TV, Android 11), made to replace the stock
-Google TV home screen. Started as a copy of MZ TX6 Home.
+Google TV home screen. Started as a copy of [MZ TX6 Home](https://github.com/MazeM3dia/MZ-TX6-Home-Launcher).
 Plain Java on the Android framework only: no AndroidX, no libraries, no internet permission.
 
 ![Home screen](docs/home.jpg)
