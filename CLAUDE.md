@@ -5,6 +5,10 @@ MZ TX6 Home (../tx6-launcher, commit c47c297, now paused). Comments that mention
 The cleanyourtv copy in ../cleanyourtv-main and the plan in ../Xiaomi tv box s project.md are REFERENCE ONLY:
 read them, borrow ideas, don't edit them.
 
+Repo: https://github.com/MazeM3dia/MZ-Box-S-Launcher (origin, public, branch main). Push with
+`git -c credential.helper=manager push` (gh CLI is not logged in). No GitHub releases for test builds
+unless the user asks: test APKs go to ../test-builds/xiaomi-box-s/.
+
 ## Target device
 - Xiaomi TV Box S 2nd Gen, model MiTV-AFKR0, codename "jaws"; Google TV, Android 11 (API 30)
 - Amlogic S905X4 (4x Cortex-A55, 2 GHz), Mali-G31 MP2; 2 GB RAM, 8 GB eMMC (keep the APK small)

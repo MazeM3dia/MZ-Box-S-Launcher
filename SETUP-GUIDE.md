@@ -3,6 +3,9 @@
 From a wiped box to MZ Box S Home as the Home screen, with the bloat switched off. Every step says what it
 needs, and the stages are in order: finish one before starting the next.
 
+Repo: [github.com/MazeM3dia/MZ-Box-S-Launcher](https://github.com/MazeM3dia/MZ-Box-S-Launcher). On the PC it is the
+folder `xiaomi-tv-box-s-launcher` inside the workspace.
+
 **Needs:**
 
 | Tag | What |

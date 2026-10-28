@@ -83,6 +83,8 @@ No internet: anything online lives in an add-on (Waktu Solat fetches the JAKIM t
 JDK 21, Android SDK 35:
 
 ```bash
+git clone https://github.com/MazeM3dia/MZ-Box-S-Launcher.git
+cd MZ-Box-S-Launcher
 ./gradlew testReleaseUnitTest assembleRelease lintRelease
 ```
 
