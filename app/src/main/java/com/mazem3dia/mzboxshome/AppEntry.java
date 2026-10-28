@@ -1,0 +1,29 @@
+package com.mazem3dia.mzboxshome;
+
+import android.content.ComponentName;
+import android.graphics.drawable.Drawable;
+
+/** One app tile: what it shows and which activity it opens. */
+final class AppEntry {
+    final ComponentName component;
+    final String label;
+    /** The app's TV banner, or null when it has none and the tile shows its icon instead. */
+    final Drawable banner;
+    /** Loaded only when there is no banner. */
+    final Drawable icon;
+    /** The glow colour while this tile has focus, or GlowColor.NONE. */
+    final int glow;
+
+    AppEntry(ComponentName component, String label, Drawable banner, Drawable icon, int glow) {
+        this.component = component;
+        this.label = label;
+        this.banner = banner;
+        this.icon = icon;
+        this.glow = glow;
+    }
+
+    /** The key for the owner's choices (order, favourites, hidden): one tile per package. */
+    String packageName() {
+        return component.getPackageName();
+    }
+}

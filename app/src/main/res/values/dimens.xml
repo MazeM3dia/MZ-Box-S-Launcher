@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- TV safe area: about 5% of the TX6's 1442x811 dp screen, so overscan never cuts the edges. -->
+    <dimen name="safe_horizontal">72dp</dimen>
+    <dimen name="safe_vertical">40dp</dimen>
+    <!-- Room for a focused tile to grow (scale 1.08) inside the safe area; root_horizontal + grow_room = safe_horizontal. -->
+    <dimen name="grow_room">16dp</dimen>
+    <dimen name="root_horizontal">56dp</dimen>
+    <dimen name="tile_gap">24dp</dimen>
+    <dimen name="tile_radius">8dp</dimen>
+    <dimen name="focus_ring">3dp</dimen>
+    <dimen name="tile_icon">72dp</dimen>
+    <dimen name="tile_label">16sp</dimen>
+    <dimen name="clock">72sp</dimen>
+    <dimen name="clock_suffix">20sp</dimen>
+    <dimen name="date">18sp</dimen>
+    <dimen name="greeting">14sp</dimen>
+    <dimen name="hero">48sp</dimen>
+    <dimen name="button_text">18sp</dimen>
+    <dimen name="section_text">18sp</dimen>
+    <!-- Favourites band: the dark rounded container around the favourites row. The padding is wider than a focused
+         tile grows (4% of its width each side), so the tile never covers the band's edge or corners. -->
+    <dimen name="band_padding">28dp</dimen>
+    <dimen name="band_radius">20dp</dimen>
+    <!-- The scrolling area starts this far below the header; rows scrolled up are cut off there. -->
+    <dimen name="header_gap">28dp</dimen>
+    <!-- The focused tile, its name included, stays this far from the scrolling area's top and from the screen's
+         bottom edge: about 12% of the TX6's 811 dp height, above a soundbar or anything in front of the TV. -->
+    <dimen name="focus_margin_top">40dp</dimen>
+    <dimen name="focus_margin_bottom">96dp</dimen>
+    <!-- Customize panel: about a third of the TX6's 1442 dp width. -->
+    <dimen name="panel_width">520dp</dimen>
+    <dimen name="menu_width">400dp</dimen>
+    <dimen name="menu_title">24sp</dimen>
+    <dimen name="panel_title">24sp</dimen>
+    <dimen name="panel_row_radius">12dp</dimen>
+    <!-- Button labels off: round icon buttons. -->
+    <dimen name="icon_button_padding">12dp</dimen>
+    <dimen name="hint_text">14sp</dimen>
+    <dimen name="move_ring">4dp</dimen>
+    <dimen name="dream_clock">96sp</dimen>
+    <dimen name="dream_date">28sp</dimen>
+</resources>

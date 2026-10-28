@@ -1,0 +1,38 @@
+plugins {
+    id 'com.android.application'
+}
+
+android {
+    namespace 'com.mazem3dia.mzboxshome'
+    compileSdk 35
+
+    defaultConfig {
+        applicationId 'com.mazem3dia.mzboxshome'
+        minSdk 26
+        targetSdk 34
+        versionCode 1
+        versionName '0.1'
+    }
+
+    buildTypes {
+        release {
+            // R8 strips unused code and resources: smaller APK, faster start on the TX6's slow CPU.
+            minifyEnabled true
+            shrinkResources true
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt')
+            // Sideloaded over ADB, never published: the debug key lets it install over a debug build.
+            signingConfig signingConfigs.debug
+        }
+    }
+
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_17
+        targetCompatibility JavaVersion.VERSION_17
+    }
+}
+
+// No app dependencies on purpose: the Android framework alone covers the grid, clock and focus.
+dependencies {
+    // Test only, never in the APK: plain JVM tests for Arrangement, src/test.
+    testImplementation 'junit:junit:4.13.2'
+}

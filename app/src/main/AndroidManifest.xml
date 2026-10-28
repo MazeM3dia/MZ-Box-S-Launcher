@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <!-- Runs on plain Android boxes like the TX6 as well as Android TV, and needs no touch screen. -->
+    <uses-feature android:name="android.software.leanback" android:required="false" />
+    <uses-feature android:name="android.hardware.touchscreen" android:required="false" />
+
+    <!-- The Wi-Fi / Ethernet / Offline label reads the network state. Not INTERNET: the launcher never
+         connects to anything. -->
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <!-- Customize > Wallpaper > Choose a picture: lists the pictures on the box (and a USB stick) to pick one.
+         Asked for only then; the chosen picture is copied into the app, so Home never needs it to start. -->
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" android:maxSdkVersion="32" />
+    <uses-permission android:name="android.permission.READ_MEDIA_IMAGES" />
+
+    <!-- Android 11+ package visibility (newer boxes, the API 34 emulator): the apps shown as tiles and the
+         Settings app. Android 9 on the TX6 ignores this. -->
+    <queries>
+        <intent>
+            <action android:name="android.intent.action.MAIN" />
+            <category android:name="android.intent.category.LAUNCHER" />
+        </intent>
+        <intent>
+            <action android:name="android.intent.action.MAIN" />
+            <category android:name="android.intent.category.LEANBACK_LAUNCHER" />
+        </intent>
+        <intent>
+            <action android:name="android.settings.SETTINGS" />
+        </intent>
+        <!-- The Waktu Solat add-on: its provider (prayer times, zone) and its page. -->
+        <package android:name="com.mazem3dia.waktusolat" />
+        <!-- Customize > Add-ons: opened from the panel, kept out of the Apps grid (AddOns). -->
+        <package android:name="com.mazem3dia.devicereport" />
+        <package android:name="com.lionlev.tv.capacity" />
+        <provider android:authorities="com.mazem3dia.waktusolat" />
+        <!-- Customize > Choose default home: Android's Home settings page, where the box has one. -->
+        <intent>
+            <action android:name="android.settings.HOME_SETTINGS" />
+        </intent>
+    </queries>
+
+    <application
+        android:label="@string/app_name"
+        android:icon="@mipmap/ic_launcher"
+        android:banner="@drawable/banner"
+        android:theme="@style/Theme.BoxSHome"
+        android:allowBackup="false"
+        android:supportsRtl="true">
+
+        <!-- The label on the activity too: simple stock launchers (and some Settings screens) read only the
+             activity's own label and show the package name when it is missing. -->
+        <activity
+            android:name=".MainActivity"
+            android:label="@string/app_name"
+            tools:ignore="RedundantLabel"
+            android:exported="true"
+            android:launchMode="singleTask"
+            android:stateNotNeeded="true"
+            android:excludeFromRecents="true"
+            android:clearTaskOnLaunch="true"
+            android:configChanges="orientation|screenSize|keyboard|keyboardHidden|navigation|uiMode"
+            android:screenOrientation="landscape">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.HOME" />
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+            <!-- Also listed in the stock launcher's app list, so it can be tried before it becomes Home. -->
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+                <category android:name="android.intent.category.LEANBACK_LAUNCHER" />
+            </intent-filter>
+        </activity>
+
+        <!-- Screensaver: pick "MZ Box S Clock" in Settings > Screen saver. Started by Android only when the box
+             is idle, never by the launcher. -->
+        <service
+            android:name=".ClockDream"
+            android:exported="true"
+            android:label="@string/dream_name"
+            android:permission="android.permission.BIND_DREAM_SERVICE">
+            <intent-filter>
+                <action android:name="android.service.dreams.DreamService" />
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+        </service>
+    </application>
+</manifest>

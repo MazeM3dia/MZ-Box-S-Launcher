@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Startup background before the chosen palette is applied (Midnight). Tile and button colours come from Palette. -->
+    <color name="background_top">#FF1B2330</color>
+    <color name="background_bottom">#FF0D1117</color>
+    <color name="text_primary">#FFFFFFFF</color>
+    <color name="text_secondary">#FFAAB4C3</color>
+    <color name="divider">#4DFFFFFF</color>
+    <!-- Home dimmed behind the Customize panel. -->
+    <color name="scrim">#99000000</color>
+    <!-- The next prayer in the header: Waktu Solat's green, lightened to read on every palette. -->
+    <color name="prayer">#FF7CE0AE</color>
+    <!-- Network label: orange while connected without internet, red while offline. -->
+    <color name="no_internet">#FFFFB74D</color>
+    <color name="offline">#FFEF5350</color>
+    <!-- Screensaver text: dimmer than white, kinder to a screen left on for hours. -->
+    <color name="dream_text">#B3FFFFFF</color>
+    <color name="icon_background">#FF091441</color>
+</resources>
