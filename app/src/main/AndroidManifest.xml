@@ -2,7 +2,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools">
 
-    <!-- Runs on plain Android boxes like the TX6 as well as Android TV, and needs no touch screen. -->
+    <!-- Runs on Google TV (the Xiaomi TV Box S) and plain Android boxes alike, and needs no touch screen. -->
     <uses-feature android:name="android.software.leanback" android:required="false" />
     <uses-feature android:name="android.hardware.touchscreen" android:required="false" />
 
@@ -15,7 +15,7 @@
     <uses-permission android:name="android.permission.READ_MEDIA_IMAGES" />
 
     <!-- Android 11+ package visibility (newer boxes, the API 34 emulator): the apps shown as tiles and the
-         Settings app. Android 9 on the TX6 ignores this. -->
+         Settings app. -->
     <queries>
         <intent>
             <action android:name="android.intent.action.MAIN" />
@@ -37,6 +37,10 @@
         <!-- Customize > Choose default home: Android's Home settings page, where the box has one. -->
         <intent>
             <action android:name="android.settings.HOME_SETTINGS" />
+        </intent>
+        <!-- Customize > Remote buttons > Turn on: Settings > Accessibility. -->
+        <intent>
+            <action android:name="android.settings.ACCESSIBILITY_SETTINGS" />
         </intent>
     </queries>
 
@@ -73,6 +77,22 @@
                 <category android:name="android.intent.category.LEANBACK_LAUNCHER" />
             </intent-filter>
         </activity>
+
+        <!-- The remote's shortcut buttons (Netflix, YouTube, Prime Video, Xiaomi TV+, Apps), which do nothing once
+             Google TV's launcher is disabled. Keys only, no screen content; off until the owner turns it on in
+             Settings > Accessibility. See RemoteButtons. -->
+        <service
+            android:name=".RemoteKeysService"
+            android:exported="false"
+            android:label="@string/remote_service_name"
+            android:permission="android.permission.BIND_ACCESSIBILITY_SERVICE">
+            <intent-filter>
+                <action android:name="android.accessibilityservice.AccessibilityService" />
+            </intent-filter>
+            <meta-data
+                android:name="android.accessibilityservice"
+                android:resource="@xml/remote_keys_service" />
+        </service>
 
         <!-- Screensaver: pick "MZ Box S Clock" in Settings > Screen saver. Started by Android only when the box
              is idle, never by the launcher. -->

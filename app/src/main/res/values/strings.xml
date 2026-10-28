@@ -93,6 +93,27 @@
     <string name="prayer_loading">Waktu solat: memuat turun…</string>
     <string name="prayer_offline">Waktu solat: tiada sambungan</string>
 
+    <!-- Remote shortcut buttons (RemoteButtons, RemoteKeysService) -->
+    <string name="section_remote">Remote</string>
+    <string name="remote_buttons">Remote buttons</string>
+    <string name="remote_helper">Button helper</string>
+    <string name="remote_helper_off_detail">Turn on MZ Box S Remote buttons in Settings › Accessibility</string>
+    <string name="remote_helper_on_detail">The buttons below work from any app</string>
+    <string name="remote_apps_grid">Apps grid</string>
+    <string name="remote_apps_grid_detail">MZ Box S Home, at the Apps</string>
+    <string name="remote_nothing">Nothing</string>
+    <string name="remote_missing">%1$s (not installed)</string>
+    <string name="remote_service_name">MZ Box S Remote buttons</string>
+    <string name="remote_service_description">Makes the Netflix, YouTube, Prime Video, Xiaomi TV+ and Apps buttons on the remote open the apps you pick in Customize in MZ Box S Home. It only looks at those buttons; it reads nothing on the screen.</string>
+    <!-- RemoteButtons.KEYS in order. -->
+    <string-array name="remote_buttons">
+        <item>Netflix</item>
+        <item>YouTube</item>
+        <item>Prime Video</item>
+        <item>Xiaomi TV+</item>
+        <item>Apps</item>
+    </string-array>
+
     <!-- Network label -->
     <string name="network_wifi">Wi-Fi</string>
     <string name="network_ethernet">Ethernet</string>

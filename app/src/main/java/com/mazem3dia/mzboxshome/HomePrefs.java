@@ -11,7 +11,7 @@ import java.util.Set;
 
 /**
  * The owner's choices: app order, favourites, hidden apps, theme, apps per row, animations, background, button
- * labels and the app to open on start. Packages are stored one per line.
+ * labels, the app to open on start and what the remote's shortcut buttons open. Packages are stored one per line.
  */
 final class HomePrefs {
     private static final String ORDER = "order";
@@ -31,6 +31,7 @@ final class HomePrefs {
     private static final String BACKGROUND = "background";
     private static final String CUSTOM_NAME = "custom_wallpaper_name";
     private static final String WALLPAPER_DIM = "wallpaper_dim";
+    private static final String REMOTE = "remote_";
 
     private final SharedPreferences prefs;
 
@@ -48,7 +49,14 @@ final class HomePrefs {
 
     void setDock(List<String> dock) { putList(DOCK, dock); }
 
-    Set<String> hidden() { return new HashSet<>(list(HIDDEN)); }
+    /**
+     * Apps kept off Home. Until the owner hides or shows one, Prime Video: the firmware (or Play) turns it back on
+     * after a reboot even when it was disabled (cleanyourtv, build 772).
+     */
+    Set<String> hidden() {
+        if (!prefs.contains(HIDDEN)) return new HashSet<>(Arrays.asList(RemoteButtons.PRIME_PACKAGE));
+        return new HashSet<>(list(HIDDEN));
+    }
 
     void setHidden(Set<String> hidden) { putList(HIDDEN, new ArrayList<>(hidden)); }
 
@@ -105,6 +113,11 @@ final class HomePrefs {
     int wallpaperDim() { return prefs.getInt(WALLPAPER_DIM, 40); }
 
     void setWallpaperDim(int percent) { prefs.edit().putInt(WALLPAPER_DIM, percent).apply(); }
+
+    /** What a remote shortcut button opens (RemoteButtons): a package, RemoteButtons.APPS_GRID or NOTHING. */
+    String remoteTarget(int key) { return prefs.getString(REMOTE + key, RemoteButtons.defaultTarget(key)); }
+
+    void setRemoteTarget(int key, String target) { prefs.edit().putString(REMOTE + key, target).apply(); }
 
     /** Debug build only: DemoApps' fake tiles added to the real ones. */
     boolean demoApps() { return prefs.getBoolean(DEMO_APPS, false); }

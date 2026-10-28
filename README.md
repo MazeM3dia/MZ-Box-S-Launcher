@@ -21,6 +21,10 @@ Plain Java on the Android framework only: no AndroidX, no libraries, no internet
   applies at once
 - **Network label**: Wi-Fi, Ethernet, orange "No internet", red "Offline"
 - **Clock screensaver** (Settings > Screen saver > MZ Box S Clock)
+- **Remote buttons**: the Netflix, YouTube, Prime Video, Xiaomi TV+ and Apps buttons keep working without Google
+  TV's home screen, and each can open any app you pick (Customize > Remote buttons). Turn on *MZ Box S Remote
+  buttons* in Settings > Accessibility once; it looks only at those buttons
+- Prime Video starts out hidden, as the firmware keeps turning it back on (show it again in Hidden apps)
 - **Home key** goes back to the tile of the app you left; pressed on Home, it goes to the top
 - Kept clear of the bottom edge of the screen, so things standing in front of the TV don't hide the focus
 - Inter Display font and Lucide outline icons
@@ -66,6 +70,7 @@ uninstalls) the stock launcher and the setup wizard, which grabs Home next; see
 | Permission | Why |
 |---|---|
 | Network state | The Wi-Fi / Ethernet / No internet label (read only) |
+| Accessibility (Remote buttons) | Only if you turn it on: catches the five shortcut buttons on the remote, nothing else, and reads nothing on screen |
 | Photos | Only for Customize > Wallpaper > Choose a picture, asked then. The picture is copied into the app, so Home never needs it afterwards |
 
 No internet: anything online lives in an add-on (Waktu Solat fetches the JAKIM times and hands them over).

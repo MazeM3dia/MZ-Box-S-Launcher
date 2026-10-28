@@ -57,6 +57,12 @@ read them, borrow ideas, don't edit them.
 - `NetworkStatus`: Wi-Fi/Ethernet label, orange "No internet" (not VALIDATED), red "Offline"; listens only
   between onStart and onStop
 - `ClockDream`: screensaver (Settings > Screen saver > MZ Box S Clock)
+- `RemoteButtons` + `RemoteKeysService`: the Xiaomi RC's shortcut buttons (Netflix 193, YouTube 190, Prime Video
+  194, Xiaomi TV+ 192, Apps 284) open what Customize > Remote buttons picks per button: an app, the Apps grid
+  (`MainActivity.EXTRA_SHOW_APPS`) or nothing. Defaults: the app printed on the button, Apps = Apps grid, TV+ =
+  nothing. Ported from cleanyourtv's box-tested InputKeyService/app_keys: a keys-only accessibility service (no
+  events, no window content), off until turned on in Settings > Accessibility (MZ Box S Remote buttons) or adb.
+  A button whose app is missing passes through. Prime Video starts out in Hidden apps (firmware re-enables it)
 - Tile width comes from the screen width and `res/values/integers.xml` columns, so any density fills the row
 - Tile menu opens on OK *release* after a hold (first key repeat), or on Menu: a dialog shown while a key is
   still down never gets key focus on Android 9. It is a platform Dialog (style Dialog: see-through, no min width)
@@ -66,6 +72,10 @@ read them, borrow ideas, don't edit them.
   add-ons (separate apps), which the launcher reads through their providers
 
 ## Testing
+- Remote buttons: `settings put secure enabled_accessibility_services
+  com.mazem3dia.mzboxshome/.RemoteKeysService` and `settings put secure accessibility_enabled 1` (overwrites
+  any other enabled service: read the old value first and put it back). Then `input keyevent 193` (Netflix),
+  190, 194, 192, 284. Undo: `settings delete secure enabled_accessibility_services`
 - Unit tests: `./gradlew testReleaseUnitTest`
 - Emulator: no API 30 TV image installed yet; `Television_1080p` or `old_android_tv` (API 28 TV). The box
   runs a 1920x1080 UI (density to confirm on the box); reset any density change with `adb shell wm density reset`. Hold OK: `adb shell input keyevent --longpress DPAD_CENTER`
@@ -85,7 +95,8 @@ read them, borrow ideas, don't edit them.
   for Gradle 8.11: in Android Studio set Settings > Build Tools > Gradle > Gradle JDK to jbr-21
 - Command line, from this folder:
   `JAVA_HOME=~/.jdks/jbr-21.0.11 ./gradlew --no-daemon testReleaseUnitTest assembleRelease lintRelease`
-- Lint must stay at zero errors. No INTERNET permission, no background services, no blur/video, minimal deps
+- Lint must stay at zero errors. No INTERNET permission, no background services (except the owner-enabled,
+  keys-only RemoteKeysService and the ClockDream screensaver), no blur/video, minimal deps
 
 ## Device rules
 - Ask before running any command that changes the device

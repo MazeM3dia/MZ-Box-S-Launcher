@@ -53,9 +53,11 @@ import java.util.concurrent.Executors;
  * The home screen: clock, date (with the Waktu Solat add-on, the Hijri date and the next prayer), network, the
  * Customize and Settings buttons, a Favourites row and a grid of every other app. Hold OK (or press Menu) on a tile
  * for its menu: Move, favourite, Hide, App info. Customize is a side panel (CustomizePanel) whose changes apply
- * at once: look, apps per row, open on start, hidden apps, default home, and the prayer zone.
+ * at once: look, apps per row, open on start, hidden apps, default home, remote buttons and the prayer zone.
  */
 public final class MainActivity extends Activity {
+    /** From the remote's Apps button (RemoteButtons.APPS_GRID): Home with the first app of the Apps grid focused. */
+    static final String EXTRA_SHOW_APPS = "com.mazem3dia.mzboxshome.SHOW_APPS";
     /** Customize > Wallpaper > Choose a picture: the permission it asks for, and how many pictures it lists. */
     private static final String PICTURES_PERMISSION = Build.VERSION.SDK_INT >= 33
             ? Manifest.permission.READ_MEDIA_IMAGES : Manifest.permission.READ_EXTERNAL_STORAGE;
@@ -243,6 +245,8 @@ public final class MainActivity extends Activity {
         super.onResume();
         // Back from an app lands here without onNewIntent: focus is still on its tile, nothing to do.
         returning = false;
+        // Back from Settings > Accessibility with Customize open: the button helper may have been turned on.
+        panel.refresh();
     }
 
     @Override
@@ -262,6 +266,10 @@ public final class MainActivity extends Activity {
         endMove();
         dismissDialog();
         panel.close();
+        if (intent.getBooleanExtra(EXTRA_SHOW_APPS, false)) {
+            focusApps();
+            return;
+        }
         if (returning) {
             View tile = lastLaunched != null ? findTile(lastLaunched) : null;
             if (tile != null) tile.requestFocus();
@@ -500,6 +508,12 @@ public final class MainActivity extends Activity {
         return null;
     }
 
+    /** The remote's Apps button: the first app of the Apps grid, or of Favourites when the grid is empty. */
+    private void focusApps() {
+        if (grid.getChildCount() > 0) grid.getChildAt(0).requestFocus();
+        else focusFirstTile();
+    }
+
     private void focusFirstTile() {
         if (dock.getChildCount() > 0) dock.getChildAt(0).requestFocus();
         else if (grid.getChildCount() > 0) grid.getChildAt(0).requestFocus();
@@ -682,6 +696,11 @@ public final class MainActivity extends Activity {
                 chooseDefaultHome();
             });
 
+            p.section(getString(R.string.section_remote));
+            p.link(getString(R.string.remote_buttons),
+                    getString(RemoteButtons.serviceOn(MainActivity.this) ? R.string.on : R.string.off),
+                    () -> p.push(remotePage));
+
             List<String[]> addOns = AddOns.installed(MainActivity.this);
             if (!addOns.isEmpty()) {
                 p.section(getString(R.string.section_addons));
@@ -837,6 +856,81 @@ public final class MainActivity extends Activity {
         if (background == Wallpaper.APP_COLOUR) return getString(R.string.bg_app_colour);
         if (background == Wallpaper.CUSTOM) return getString(R.string.bg_custom);
         return getResources().getStringArray(R.array.wallpaper_pictures)[background];
+    }
+
+    /**
+     * Customize > Remote buttons: whether the button helper (RemoteKeysService) is on, with a way to Settings >
+     * Accessibility, then each shortcut button and what it opens.
+     */
+    private final CustomizePanel.Page remotePage = new CustomizePanel.Page() {
+        @Override
+        public String title() {
+            return getString(R.string.remote_buttons);
+        }
+
+        @Override
+        public void build(CustomizePanel p) {
+            boolean on = RemoteButtons.serviceOn(MainActivity.this);
+            p.option(getString(R.string.remote_helper),
+                    getString(on ? R.string.remote_helper_on_detail : R.string.remote_helper_off_detail), on,
+                    MainActivity.this::openAccessibility);
+            p.section(getString(R.string.section_remote));
+            String[] names = getResources().getStringArray(R.array.remote_buttons);
+            for (int i = 0; i < RemoteButtons.KEYS.length; i++) {
+                int key = RemoteButtons.KEYS[i];
+                String name = names[i];
+                p.link(name, targetName(prefs.remoteTarget(key)), () -> {
+                    remoteKey = key;
+                    remoteKeyName = name;
+                    p.push(remoteTargetPage);
+                });
+            }
+        }
+    };
+
+    /** The button Customize > Remote buttons is choosing for, and its name. */
+    private int remoteKey;
+    private String remoteKeyName;
+
+    /** One remote button: nothing, the Apps grid, or any app (hidden ones too). OK picks and goes back. */
+    private final CustomizePanel.Page remoteTargetPage = new CustomizePanel.Page() {
+        @Override
+        public String title() {
+            return remoteKeyName;
+        }
+
+        @Override
+        public void build(CustomizePanel p) {
+            String current = prefs.remoteTarget(remoteKey);
+            p.option(getString(R.string.remote_nothing), null, current.equals(RemoteButtons.NOTHING),
+                    () -> pickRemoteTarget(RemoteButtons.NOTHING));
+            p.option(getString(R.string.remote_apps_grid), getString(R.string.remote_apps_grid_detail),
+                    current.equals(RemoteButtons.APPS_GRID), () -> pickRemoteTarget(RemoteButtons.APPS_GRID));
+            if (!current.isEmpty() && !current.equals(RemoteButtons.APPS_GRID) && findInstalled(current) == null) {
+                p.option(targetName(current), null, true, () -> pickRemoteTarget(current));
+            }
+            for (AppEntry app : installed)
+                p.option(app.label, null, app.packageName().equals(current),
+                        () -> pickRemoteTarget(app.packageName()));
+        }
+    };
+
+    private void pickRemoteTarget(String target) {
+        prefs.setRemoteTarget(remoteKey, target);
+        panel.back();
+    }
+
+    /** A remote button's target as Customize shows it. */
+    private String targetName(String target) {
+        if (target.equals(RemoteButtons.NOTHING)) return getString(R.string.remote_nothing);
+        if (target.equals(RemoteButtons.APPS_GRID)) return getString(R.string.remote_apps_grid);
+        AppEntry app = findInstalled(target);
+        return app != null ? app.label : getString(R.string.remote_missing, target);
+    }
+
+    private void openAccessibility() {
+        start(new Intent(Settings.ACTION_ACCESSIBILITY_SETTINGS).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK),
+                getString(R.string.cannot_open_settings), null);
     }
 
     private final CustomizePanel.Page openOnStartPage = new CustomizePanel.Page() {
