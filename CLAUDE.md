@@ -60,6 +60,8 @@ read them, borrow ideas, don't edit them.
   1442x811 dp that res/values was tuned for. Google TV reports 320 dpi at 1080p (960x540 dp), which wrapped
   the date and made everything 1.5x. Done by wrapping the base context in attachBaseContext (Android 11
   refuses applyOverrideConfiguration there, and DisplayManager is not usable yet)
+  Each add-on (waktu-solat 2.1, capacity-stats 1.1, device-report 1.1) has its own copy of UiScale in its
+  activity: without it Waktu Solat's cards cut off their icons and times on Google TV. Keep the copies in step
 - `ClockDream`: screensaver (Settings > Screen saver > MZ Box S Clock)
 - `RemoteButtons` + `RemoteKeysService`: the Xiaomi RC's shortcut buttons (Netflix 193, YouTube 190, Prime Video
   194, Xiaomi TV+ 192, Apps 284) open what Customize > Remote buttons picks per button: an app, the Apps grid

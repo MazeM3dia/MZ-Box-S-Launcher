@@ -4,6 +4,7 @@ import android.Manifest;
 import android.app.Activity;
 import android.content.ContentResolver;
 import android.content.ContentValues;
+import android.content.Context;
 import android.content.pm.PackageManager;
 import android.graphics.Color;
 import android.graphics.Typeface;
@@ -53,6 +54,12 @@ public final class MainActivity extends Activity {
     private TextView summary;
     private boolean running;
     private int done;
+
+    /** The TX6's layout scale on any screen (UiScale): Google TV boxes report a higher density for 1080p. */
+    @Override
+    protected void attachBaseContext(Context base) {
+        super.attachBaseContext(UiScale.wrap(base));
+    }
 
     @Override
     protected void onCreate(Bundle state) {

@@ -1,6 +1,7 @@
 package com.lionlev.tv.capacity;
 
 import android.app.Activity;
+import android.content.Context;
 import android.os.*;
 import android.view.*;
 import android.widget.*;
@@ -13,6 +14,12 @@ public final class StatsActivity extends Activity {
     private volatile Handler background;
     private TextView reading;
     private LinearLayout column;
+
+    /** The TX6's layout scale on any screen (UiScale): Google TV boxes report a higher density for 1080p. */
+    @Override
+    protected void attachBaseContext(Context base) {
+        super.attachBaseContext(UiScale.wrap(base));
+    }
 
     @Override public void onCreate(Bundle state) {
         super.onCreate(state);
