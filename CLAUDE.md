@@ -77,7 +77,7 @@ read them, borrow ideas, don't edit them.
   any other enabled service: read the old value first and put it back). Then `input keyevent 193` (Netflix),
   190, 194, 192, 284. Undo: `settings delete secure enabled_accessibility_services`
 - Unit tests: `./gradlew testReleaseUnitTest`
-- Emulator: no API 30 TV image installed yet; `Television_1080p` or `old_android_tv` (API 28 TV). The box
+- Emulator: `android_11_tv` (Google TV, API 30, 1920x1080, density 320), matching the box's Android. The box
   runs a 1920x1080 UI (density to confirm on the box); reset any density change with `adb shell wm density reset`. Hold OK: `adb shell input keyevent --longpress DPAD_CENTER`
 - Screensaver: `settings put secure screensaver_components com.mazem3dia.mzboxshome/.ClockDream`, then
   `am start -n com.android.systemui/.Somnambulator`; put the old value back afterwards

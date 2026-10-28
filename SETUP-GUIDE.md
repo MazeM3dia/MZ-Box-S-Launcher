@@ -8,9 +8,17 @@ needs, and the stages are in order: finish one before starting the next.
 | Tag | What |
 |---|---|
 | **Box** | The Xiaomi box, its remote and the TV |
-| **PC** | The Windows PC with Android Studio (adb lives in `%LOCALAPPDATA%\Android\Sdk\platform-tools`) |
+| **PC** | The Windows PC with Android Studio (adb lives in `%LOCALAPPDATA%\Android\Sdk\platform-tools`). It is on an Ethernet cable to the router; the box is on Wi-Fi from the same router (see 2.1) |
 | **Phone** | Your phone (LocalSend, to send APKs without adb) |
-| **Claude** | Claude Code on the PC, in this folder. Claude asks before every command that changes the box |
+| **Claude** | **Claude Code** on that PC (see below). Claude asks before every command that changes the box |
+
+**Which Claude to use**
+
+| Claude | Use it for this setup? |
+|---|---|
+| **Claude Code in VS Code** (the Claude panel you use now) | **Yes, this one.** It runs on the PC, so it can run adb, reach the box on your home network, build the APKs and edit this repo. Open the folder `C:\Users\muham\Desktop\tx6-launcher-custom` (the workspace, not a subfolder): its project notes and memory are tied to that folder |
+| Claude Code in the Claude desktop app (Code tab) or in a terminal | Also works, same abilities, as long as it is opened on that same folder. Pick one and stick to it |
+| Claude desktop app chat, claude.ai in a browser, Claude phone app | **No** for the steps marked Claude: they run in the cloud, can't reach the box or run adb, and don't see this repo. Fine for reading this guide or asking a general question away from the PC |
 
 **Safety rules for every stage**
 
@@ -27,10 +35,10 @@ Sources: the cleanyourtv list tested on this model (builds 737 and 772,
 
 | # | Step | Needs |
 |---|---|---|
-| 0.1 | Make the Android 11 TV emulator: Device Manager > TV > **Google TV (1080p)** > system image **Android 11 (API 30), Google TV**. Start it | PC |
+| 0.1 | Android 11 TV emulator: **done** (`android_11_tv`: Google TV, API 30, 1920x1080, density 320). Start it from Android Studio's Device Manager when Claude needs it | PC |
 | 0.2 | Install MZ Box S Home on the emulator, check Home, Customize, and **Customize > Remote buttons** (keys 193, 190, 194, 192, 284 sent with adb) | Claude, PC |
 | 0.3 | Fix what the emulator test turns up, build the test APK, put it in `../test-builds/` | Claude |
-| 0.4 | Set up the debloat tools once: in this folder, in PowerShell: `python -m venv tools\venv` then `tools\venv\Scripts\python.exe -m pip install -r tools\requirements.txt` (they come from cleanyourtv: `tools/`, MIT) | PC (you, or Claude with your OK) |
+| 0.4 | Set up the debloat tools once, in PowerShell in `xiaomi-tv-box-s-launcher`: `python -m venv tools\venv` then `tools\venv\Scripts\python.exe -m pip install -r tools\requirements.txt` (the tools come from cleanyourtv, MIT). Claude's safety check blocks this download, so you run it, or allow it when Claude asks | PC (you) |
 | 0.5 | Read through [debloat/debloat.txt](debloat/debloat.txt) and comment out anything you want to keep (put `#` in front) | PC |
 
 ## Stage 1: Box settings, no PC needed
@@ -50,10 +58,11 @@ Sources: the cleanyourtv list tested on this model (builds 737 and 772,
 
 | # | Step | Needs |
 |---|---|---|
-| 2.1 | PC and box on the same network | PC, Box |
-| 2.2 | `adb connect <box-ip>:5555` | PC or Claude |
-| 2.3 | On the TV, the *Allow USB debugging?* prompt: tick **Always allow from this computer**, OK | Box |
-| 2.4 | `adb devices` shows the box as `device` (not `unauthorized`) | PC or Claude |
+| 2.1 | **Same network, cable and Wi-Fi.** The PC on Ethernet and the box on Wi-Fi can talk as long as both go through the same router. Check: in PowerShell, `ipconfig` shows the PC's IPv4 address under the *Ethernet adapter*; it and the box's IP (1.7) should start the same, e.g. `192.168.1.20` and `192.168.1.45`. The box must **not** be on a *guest* Wi-Fi (guest networks block devices from reaching each other) | PC, Box |
+| 2.2 | Reach test: `Test-NetConnection <box-ip> -Port 5555` says `TcpTestSucceeded : True` | Claude |
+| 2.3 | `adb connect <box-ip>:5555` | Claude |
+| 2.4 | On the TV, the *Allow USB debugging?* prompt: tick **Always allow from this computer**, OK | Box |
+| 2.5 | `adb devices` shows the box as `device` (not `unauthorized`) | Claude |
 
 ## Stage 3: Read-only check (changes nothing)
 
@@ -62,6 +71,7 @@ Claude runs these and tells you what it finds before anything changes:
 | # | Check | Command | Needs |
 |---|---|---|---|
 | 3.1 | Model, Android version and build (737 or 772?) | `adb shell getprop ro.build.fingerprint` | Claude |
+| 3.1b | Screen size and density, so the emulator matches the box | `adb shell wm size`, `adb shell wm density` | Claude |
 | 3.2 | Who owns the saved Wi-Fi: must **not** say setupwraith (else redo 1.1) | `adb shell dumpsys wifi \| findstr cname=` | Claude |
 | 3.3 | On build 772: an old hidden network from first setup. Forget it if it is there | `adb shell cmd wifi list-networks`, then `cmd wifi forget-network <id>` | Claude, with your OK |
 | 3.4 | Which apps answer Home and which one has it | `adb shell cmd package query-activities --brief -a android.intent.action.MAIN -c android.intent.category.HOME` | Claude |
@@ -78,7 +88,8 @@ Claude runs these and tells you what it finds before anything changes:
 
 | # | Step | Needs |
 |---|---|---|
-| 5.1 | Run the list: `powershell -ExecutionPolicy Bypass -File tools\disable.ps1 -TvHost <box-ip> debloat\debloat.txt`. It refuses core Android packages, skips the setup wizard while it owns the Wi-Fi, and never takes away the app that owns Home | Claude, with your OK |
+| 5.1 | Run the list: `powershell -ExecutionPolicy Bypass -File tools\disable.ps1 -TvHost <box-ip> debloat\debloat.txt` (needs 0.4). It refuses core Android packages and never takes away the app that owns Home; the Home-switch lines are commented out, so Home stays with Google TV for now | Claude, with your OK |
+| 5.1b | The tools may connect with a key of their own: if the TV asks *Allow USB debugging?* again, tick Always allow and OK | Box |
 | 5.2 | Look at the TV: Home, Wi-Fi, YouTube and the remote still fine | Box |
 | 5.3 | Restart the box once, check again | Box |
 
@@ -99,11 +110,11 @@ com.xiaomi.mitv.updateservice`) when you want to check for one.
 
 | # | Step | Needs |
 |---|---|---|
-| 6.1 | Install MZ Box S Home (and Waktu Solat): `adb install -r <apk>`, or send the APKs with LocalSend and open them on the box | Claude, or Phone + Box |
+| 6.1 | Install MZ Box S Home (and Waktu Solat): Claude runs `adb install -r <apk>`. Without adb: install LocalSend on the box from Play Store, send the APKs from the PC or phone, open them on the box and allow installing from LocalSend | Claude, or Phone + Box |
 | 6.2 | Use it from the apps list for a while. Google TV keeps Home until it is turned off, so there is no "Always" choice yet | Box |
-| 6.3 | **Remote buttons**: Settings > System > Accessibility > **MZ Box S Remote buttons** > on. Then Customize > Remote buttons: pick what each button opens | Box |
+| 6.3 | **Remote buttons**: Settings > System > Accessibility, in the services list > **MZ Box S Remote buttons** > on (or Claude turns it on over adb). Then Customize > Remote buttons: pick what each button opens | Box (or Claude) |
 | 6.4 | Check again that the Wi-Fi is not owned by setupwraith (3.2) | Claude |
-| 6.5 | Turn off the setup wizard **first**: `adb shell pm disable-user --user 0 com.google.android.tungsten.setupwraith`. Wi-Fi may drop for ~20 s and ask for the password once: enter it with the remote | Claude, Box |
+| 6.5 | Turn off the setup wizard **first**: `adb shell pm disable-user --user 0 com.google.android.tungsten.setupwraith`. Wi-Fi may drop for ~20 s and ask for the password once: enter it with the remote. adb drops with it: Claude runs `adb connect <box-ip>:5555` again once the box is back on Wi-Fi | Claude, Box |
 | 6.6 | Then Google TV's Home: `adb shell pm disable-user --user 0 com.google.android.apps.tv.launcherx` | Claude |
 | 6.7 | Press Home on the remote: MZ Box S Home should come up | Box |
 | 6.8 | Claude checks what really has the screen: `adb shell dumpsys activity activities \| findstr mFocusedApp`. **If it says `RecoveryActivity`:** turn Google TV's Home back on at once (`pm enable com.google.android.apps.tv.launcherx`) and **do not restart the box** (a Xiaomi TV wiped itself after a restart on that screen) | Claude |
