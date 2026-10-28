@@ -56,6 +56,10 @@ read them, borrow ideas, don't edit them.
   to files/custom_wallpaper.jpg (Wallpaper.CUSTOM), so starts need neither the permission nor the original
 - `NetworkStatus`: Wi-Fi/Ethernet label, orange "No internet" (not VALIDATED), red "Offline"; listens only
   between onStart and onStop
+- `UiScale`: the launcher (MainActivity, ClockDream) lays out as if the screen were 811 dp tall, the TX6's
+  1442x811 dp that res/values was tuned for. Google TV reports 320 dpi at 1080p (960x540 dp), which wrapped
+  the date and made everything 1.5x. Done by wrapping the base context in attachBaseContext (Android 11
+  refuses applyOverrideConfiguration there, and DisplayManager is not usable yet)
 - `ClockDream`: screensaver (Settings > Screen saver > MZ Box S Clock)
 - `RemoteButtons` + `RemoteKeysService`: the Xiaomi RC's shortcut buttons (Netflix 193, YouTube 190, Prime Video
   194, Xiaomi TV+ 192, Apps 284) open what Customize > Remote buttons picks per button: an app, the Apps grid

@@ -1,5 +1,6 @@
 package com.mazem3dia.mzboxshome;
 
+import android.content.Context;
 import android.os.Handler;
 import android.os.Looper;
 import android.service.dreams.DreamService;
@@ -32,6 +33,12 @@ public final class ClockDream extends DreamService {
             main.postDelayed(this, MOVE_MS);
         }
     };
+
+    /** The launcher's layout scale (UiScale), so the clock matches Home's. */
+    @Override
+    protected void attachBaseContext(Context base) {
+        super.attachBaseContext(UiScale.wrap(base));
+    }
 
     @Override
     public void onAttachedToWindow() {

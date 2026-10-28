@@ -144,6 +144,12 @@ public final class MainActivity extends Activity {
         }
     };
 
+    /** The TX6's layout scale on any screen (UiScale): Google TV boxes report a higher density for 1080p. */
+    @Override
+    protected void attachBaseContext(Context base) {
+        super.attachBaseContext(UiScale.wrap(base));
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
