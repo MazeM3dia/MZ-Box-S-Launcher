@@ -50,6 +50,9 @@ as normal apps.
 
 ## Install on the box
 
+The full path from a wiped box (settings, adb, debloat, Home switch, way back) is in
+[SETUP-GUIDE.md](SETUP-GUIDE.md). In short:
+
 Get the APKs from [Releases](../../releases) (or build them, below), then use any of:
 
 - **LocalSend:** send the APKs from a phone or PC to the box and open them from LocalSend's received files.

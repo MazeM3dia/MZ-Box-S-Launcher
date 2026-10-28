@@ -6,3 +6,5 @@ local.properties
 *.iml
 *.apk
 hs_err_pid*.log
+tools/venv/
+__pycache__/

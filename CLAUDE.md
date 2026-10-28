@@ -110,6 +110,14 @@ read them, borrow ideas, don't edit them.
 - Prime Video (com.amazon.amazonvideo.livingroom) gets re-enabled by firmware/Play after reboots
 - Way back: `pm enable com.google.android.apps.tv.launcherx` (and setupwraith), then pick it as Home
 
+## Box setup and debloat
+- SETUP-GUIDE.md: the owner's step-by-step (stages 0-7, who does what: Box / PC / Phone / Claude)
+- debloat/debloat.txt: Tier 1 tested on this box, Tier 2 sibling-tested (commented), Tier 3 Home switch
+  (commented: done by hand in guide stage 6, setupwraith before launcherx)
+- tools/: tv.py, disable.ps1, restore.ps1, recovery.py, check.py copied unchanged from cleanyourtv (MIT,
+  tools/LICENSE-cleanyourtv.txt). They need tools/venv (`python -m venv tools/venv`, pip install -r
+  tools/requirements.txt); undo records go to ~/.cleanyourtv/
+
 ## Useful references
 - ../cleanyourtv-main/launcher/app/src/main/AndroidManifest.xml, MainActivity.java, GridNavigation.java
 - ../cleanyourtv-main/examples/xiaomi-mi-box-s-2nd-gen/ (this box), ../cleanyourtv-main/launcher (app_keys remap)

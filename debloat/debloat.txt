@@ -1,0 +1,57 @@
+# Xiaomi TV Box S 2nd Gen (MiTV-AFKR0, "jaws"), Google TV 11. One package per line, # comments allowed.
+# Same format as cleanyourtv's lists, so its tools/disable.ps1 and restore.ps1 read it too.
+# Everything is DISABLED for user 0 (pm disable-user), never uninstalled; `pm enable <pkg>` undoes one.
+# Steps, risks and the order: ../SETUP-GUIDE.md. Run with tools\disable.ps1 (copied from cleanyourtv).
+
+# ---- Tier 1: tested on this exact box (cleanyourtv, builds 737 and 772, kept for days) ----
+
+# Telemetry and attribution
+com.miui.tv.analytics                  # Mi analytics
+com.xiaomi.statistic                   # Xiaomi usage stats uploader
+com.google.android.feedback
+com.google.android.partnersetup        # Google RLZ attribution pings
+
+# Ad rows, promos and auto-installs
+com.mitv.tvhome.oemtab                 # Xiaomi ad row
+com.mitv.tvhome.michannel              # Mi content rows
+com.mitv.tvhome.mitvplus               # Mi TV+ ad-funded channels
+com.mitv.tvhome.atv                    # PatchWall
+com.xm.webcontent                      # Xiaomi web promos
+android.autoinstalls.config.xioami.mibox3   # Play auto-install of partner apps (sic, "xioami")
+
+# Xiaomi update service, off by choice; re-enable it to check for a firmware update
+com.xiaomi.mitv.updateservice
+
+# Preloaded apps, off by choice (MZ Box S Home also hides Prime Video, which firmware turns back on)
+com.amazon.amazonvideo.livingroom      # Prime Video
+com.google.android.videos              # Google TV / Play Movies
+com.google.android.play.games
+com.android.printspooler
+
+# ---- Tier 2: tested on sibling Google TV boxes, NOT yet on this one. Uncomment one at a time ----
+# Check it exists first: adb shell pm list packages <name>
+# com.android.tv.feedbackconsent                # Xiaomi Box S 3rd gen, Chromecast GTV 4K
+# com.google.android.tv.remotecontrol.logging   # remote usage logging (Chromecast GTV 4K)
+# com.google.android.apps.tv.netoscope          # network diagnostics reporting (Chromecast GTV 4K)
+# com.google.android.tvrecommendations          # Mi Box S on Android 12
+# com.google.android.marvin.talkback            # screen reader; keep if anyone needs it
+# com.google.android.youtube.tvmusic            # YouTube Music; the tested list keeps it on purpose
+# com.google.android.apps.tv.dreamx             # Google ambient screensaver: pick MZ Box S Clock first
+# com.google.android.backdrop                   # ambient mode pictures, goes with dreamx
+
+# ---- Tier 3: the Home switch. ONLY after MZ Box S Home is installed and works from the apps list ----
+# Order matters: setupwraith first, then launcherx (a Xiaomi MiTV-MOSR4 factory-reset itself after a reboot
+# on setupwraith's recovery screen). Before setupwraith: forget the Wi-Fi network and join it again in
+# Settings, or the box drops off Wi-Fi for good (a network saved in the setup wizard belongs to it).
+# Re-enable both before a factory reset.
+# com.google.android.tungsten.setupwraith
+# com.google.android.apps.tv.launcherx
+
+# ---- Keep (listed so nobody adds them) ----
+# Google Assistant com.google.android.katniss, Chromecast com.google.android.apps.mediashell, phone remote
+# com.google.android.tv.remote.service, com.mi.bluetooth (the remote is Bluetooth), com.droidlogic* (Amlogic
+# system), com.xiaomi.mitv.service, com.xiaomi.gtv.settings, com.android.tv.settings, Xiaomi USB media apps
+# (mimusic2, mitv.gallery, mediaexplorer, mitv.videoplayer), Miracast (smartshare, wfdsinkhelperservice),
+# com.xiaomi.tvqs.overseas (log uploader, untested disabled), com.xiaomi.android.tvsetup.partnercustomizer.
+# Never: android, com.android.systemui/shell/phone/settings, permissioncontroller, packageinstaller,
+# ext.services, ext.shared, modulemetadata, overlay.modules*, com.android.providers.* (the box may not boot).
